@@ -53,13 +53,14 @@ const productRender = function(product) {
     productCard.append(productsImg);
     productCard.append(productsContent);
 
+    productsTable.append(productItem);
     productsContent.append(productBtnWrapper);
     productsContent.append(productsTitle);
     productsContent.append(productsPrice);
     productsContent.append(productsPromotionPrice);
     productsContent.append(productsDate);
     productsContent.append(productsParagraph);
-
+    
     return productItem;
 }
 
