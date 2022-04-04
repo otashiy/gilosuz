@@ -14,7 +14,7 @@ const addZero = function(number) {
 const showDate = function (dateString) {
     const date = new Date(dateString);
 
-    return `${addZero(date.getDate())}.${addZero(date.getMonth())}.${addZero(date.getFullYear())}`;
+    return `${addZero(date.getDate())}.${addZero(date.getMonth() + 1)}.${addZero(date.getFullYear())}`;
 }
 
 const productsTable = document.querySelector("#products");
@@ -39,6 +39,15 @@ const productRender = function(product) {
     const productsDate = createElement("p", "card-text", showDate(product.addedDate));
     const productPromotion = createElement("s");
     productPromotion.textContent = mark;
+   
+    const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled mt-3");
+    const benefitsItem = createElement("li", "me-1 mb-1");
+    const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-danger", product.benefits);
+   
+   
+    benefitsItem.append(benefitsBtn);
+    benefitsList.append(benefitsItem);
+
 
 
     productsPromotionPrice.append(productPromotion);
@@ -60,6 +69,9 @@ const productRender = function(product) {
     productsContent.append(productsPromotionPrice);
     productsContent.append(productsDate);
     productsContent.append(productsParagraph);
+    productsContent.append(benefitsList);
+   
+    
     
     return productItem;
 }
@@ -89,7 +101,7 @@ const inputBenefits = elements.benefits;
 const titleValue = inputTitle.value;
 const priceValue = inputPrice.value;
 const selectValue = inputSelect.value;
-const benefitsValue = inputBenefits.value.split(",");
+const benefitsValue = inputBenefits.value.split(";");
 
 
 if (titleValue.trim() && priceValue && selectValue) {
@@ -119,10 +131,11 @@ select.append(optionSelect);
 
 const input = document.querySelector("#benefits");
 const optionsWrapper = document.querySelector("option-wrapper");
-const option = [];
+let option = [];
 input.addEventListener("input", function() {
 
-const splitedValue = input.value.trim().split(",");
+const splitedValue = input.value.trim().split(";");
+
 if (splitedValue.length === 2) {
 option.push(splitedValue[0]);
 input.value = "";
@@ -135,4 +148,9 @@ optionSpan.textContent = option[x];
 optionsWrapper.append(optionSpan);
 }
 }
+})
+const btn = document.querySelector("#product-btn");
+btn.addEventListener("click", function() {
+    optionsWrapper.innerHTML = "";
+    option = [];
 })
