@@ -1,1 +1,0 @@
-# gilosuz js portfolio!
