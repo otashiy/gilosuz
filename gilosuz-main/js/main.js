@@ -33,8 +33,10 @@ const productRender = function(product) {
     const productBtnWrapper = createElement("div", "position-absolute top-0 end-0 d-flex");
     const productBtn = createElement("button", "btn rounded-0 btn-secondary");
     const productBtnDanger = createElement("button", "btn rounded-0 btn-danger");
+    productBtnDanger.setAttribute("data-id", product.id);
     const productInner = createElement("i","fa-solid fa-pen");
     const productInnerDanger = createElement("i", "fa-solid fa-trash");
+    productInnerDanger.style.pointerEvents = "none";
     const productsPromotionPrice = createElement("p", "card-text");
     const productsDate = createElement("p", "card-text", showDate(product.addedDate));
     const productPromotion = createElement("s");
@@ -76,15 +78,15 @@ const productRender = function(product) {
     return productItem;
 }
 
-for (let i = 0; i < products.length; i++) {
-    const currentProducts = products[i];
-    
-    const productItem = productRender(currentProducts)
-    
-    productsTable.append(productItem);
-
-   
+const renderProducts = function() {
+    productsTable.innerHTML = "";
+    products.forEach(function(currentProducts) {
+        const productItem = productRender(currentProducts);
+        productsTable.append(productItem);
+    });
 }
+
+renderProducts();
 
 const addForm = document.querySelector("#product-table");
 const addProductModal = new bootstrap.Modal(document.querySelector("#edit-product-modal"));
@@ -153,4 +155,17 @@ const btn = document.querySelector("#product-btn");
 btn.addEventListener("click", function() {
     optionsWrapper.innerHTML = "";
     option = [];
-})
+});
+productsTable.addEventListener("click", function(evt) {
+    if (evt.target.matches(".btn-danger")) {
+    const productId = +evt.target.dataset.id;
+    const productItemIndex = products.findIndex(function(product) {
+    return product.id === productId;
+    })
+    products.splice(productItemIndex, 1);
+    
+    renderProducts();
+    }
+});
+
+
