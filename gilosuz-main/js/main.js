@@ -34,7 +34,7 @@ const productRender = function (product) {
     const productBtn = createElement("button", "btn rounded-0 btn-secondary");
     productBtn.setAttribute("data-id", product.id);
     productBtn.setAttribute("data-bs-toggle", "modal");
-    productBtn.setAttribute("data-bs-target", "#new-product-modal")
+    productBtn.setAttribute("data-bs-target", "#new-product-modal");
     const productBtnDanger = createElement("button", "btn rounded-0 btn-danger");
     productBtnDanger.setAttribute("data-id", product.id);
     const productInner = createElement("i", "fa-solid fa-pen");
@@ -49,7 +49,7 @@ const productRender = function (product) {
 
     const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled mt-3");
     const benefitsItem = createElement("li", "me-1 mb-1");
-    const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-danger", product.benefits);
+    const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", product.benefits);
 
 
     benefitsItem.append(benefitsBtn);
@@ -127,16 +127,18 @@ addForm.addEventListener("submit", function (evt) {
         const elProduct = productRender(product);
     }
 })
-const select = document.querySelector("#manufacturer");
 
+const select = document.querySelector("#manufacturer");
 for (let m = 0; m < manufacturers.length; m++) {
     const currentManufacturers = manufacturers[m];
     const optionSelect = createElement("option", "", currentManufacturers.name);
 
     select.append(optionSelect);
+
 }
 
-const input = document.querySelector("#benefits");
+
+const input = document.querySelector("#edit-benefits");
 const optionsWrapper = document.querySelector("option-wrapper");
 let option = [];
 input.addEventListener("input", function () {
@@ -159,7 +161,7 @@ input.addEventListener("input", function () {
 const editTitle = document.querySelector("#edit-title");
 const editPrice = document.querySelector("#edit-price");
 const editManufacturer = document.querySelector("#edit-manufacturer");
-const editBenefits = document.querySelector("#edit-benefits-table");
+const editBenefits = document.querySelector("#benefits");
 
 
 const btn = document.querySelector("#product-btn");
@@ -182,10 +184,10 @@ productsTable.addEventListener("click", function (evt) {
         })
         editTitle.value = editProductItem.title;
         editPrice.value = editProductItem.price;
-        editManufacturer.vlaue = editProductItem.manufacturer;
+        editManufacturer.vlaue = editProductItem.manufacturers;
         editBenefits.value = editProductItem.benefits;
 
-        editForm.setAttribute("data-editing-id", editProductClicked.id);
+        editForm.setAttribute("data-editing-id", editProductClicked);
 
     }
     renderProducts();
@@ -195,22 +197,12 @@ const editProductModal = new bootstrap.Modal(document.querySelector("#new-produc
 editForm.addEventListener("submit", function (evt) {
     evt.preventDefault();
 
-    const editingId = +evt.target.dataset.editinId;
+    const editingId = +evt.target.dataset.editingId;
 
     const titleValue = editTitle.value;
     const priceValue = editPrice.value;
     const selectValue = editManufacturer.value;
-    const benefitsValue = editBenefits.value.split(";");
-
-    // const editSelect = document.querySelector("#edit-manufacturer");
-
-    // for (let m = 0; m < manufacturers.length; m++) {
-    //     const currentManufacturers = manufacturers[m];
-    //     const optionSelect = createElement("option", "", currentManufacturers.name);
-
-    //     editSelect.append(optionSelect);
-    // }
-
+    const editBenefitsValue = editBenefits.value.split(";");
 
     if (titleValue.trim() && priceValue && selectValue) {
         const product = {
@@ -220,16 +212,24 @@ editForm.addEventListener("submit", function (evt) {
             price: priceValue,
             model: selectValue,
             addedDate: new Date().toISOString(),
-            benefits: benefitsValue,
+            benefits: editBenefitsValue,
         }
 
+        const editingItemIndex = products.findIndex(function (product) {
+            return product.id === editingId;
+        })
+        products.splice(editingItemIndex, 1, product);
+        editForm.reset();
+        renderProducts();
+        editProductModal.hide();
+
+        
     }
-    const editinItemIndex = findIndex(function (product) {
-        return product.id = editingId;
-    })
-    editForm.reset();
-    products.splice(editinItemIndex, 1, product);
-    renderProducts();
-    editProductModal.hide();
-   
-})
+});
+const editSelect = document.querySelector("#edit-manufacturer");
+for (let l = 0; l < manufacturers.length; l++) {
+    const editCurrentManufacturers = manufacturers[l];
+    const editOptionSelect = createElement("option", "", editCurrentManufacturers.name);
+
+    editSelect.append(editOptionSelect);
+}
