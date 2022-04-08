@@ -82,12 +82,12 @@
         <div class="modal-body">
           <form id="edit-product-table">
             <div class="mb-3">
-              <label for="product-title" class="form-label">Title</label>
-              <input type="text" required class="form-control" id="title" placeholder="Falon telefon">
+              <label for="product-title" class="form-label">New product title</label>
+              <input type="text" required class="form-control" id="title" placeholder="Your phone">
             </div>
             <div class="mb-3">
-              <label for="price" class="form-label">Narxi</label>
-              <input type="number" required class="form-control" id="price" placeholder="12400000">
+              <label for="price" class="form-label">Cost</label>
+              <input type="number" required class="form-control" id="price" placeholder="1000000">
             </div>
             <div class="mb-3">
               <label for="product-manufacturer" class="form-label">Manufacturer</label>
@@ -99,10 +99,7 @@
 
             <div class="mb-3">
               <label for="benefits" class="form-label">Benefits</label>
-              <input type="text" required class="form-control" id="benefits" placeholder="benefits">
-              <div class="option-wrapper">
-                
-              </div>
+              <input type="text" class="form-control" id="add-benefits" placeholder="benefits">
               <ul id="benefits-table" class="d-flex flex-wrap list-unstyled mt-3">
                 <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-primary">8gb</button></li>
                 <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-primary">128gb</button></li>
@@ -143,10 +140,8 @@
 
             <div class="mb-3">
               <label for="benefits" class="form-label">Benefits</label>
-              <input type="text" required class="form-control" id="edit-benefits" placeholder="benefits">
-              <div class="option-wrapper">
-                
-              </div>
+              <input type="text" class="form-control" id="edit-benefits" placeholder="benefits">
+              
               <ul id="edit-benefits-table" class="d-flex flex-wrap list-unstyled mt-3">
                 <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-primary">8gb</button></li>
                 <li class="me-1 mb-1"><button type="button" class="btn btn-sm badge rounded-pill btn-primary">128gb</button></li>

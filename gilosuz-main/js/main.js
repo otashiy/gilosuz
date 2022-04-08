@@ -46,7 +46,6 @@ const productRender = function (product) {
     const productPromotion = createElement("s");
     productPromotion.textContent = mark;
 
-
     const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled mt-3");
     const benefitsItem = createElement("li", "me-1 mb-1");
     const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", product.benefits);
@@ -54,6 +53,7 @@ const productRender = function (product) {
 
     benefitsItem.append(benefitsBtn);
     benefitsList.append(benefitsItem);
+
 
 
 
@@ -83,6 +83,8 @@ const productRender = function (product) {
     return productItem;
 }
 
+
+
 const renderProducts = function () {
     productsTable.innerHTML = "";
     products.forEach(function (currentProducts) {
@@ -90,43 +92,7 @@ const renderProducts = function () {
         productsTable.append(productItem);
     });
 }
-
 renderProducts();
-
-const addForm = document.querySelector("#edit-product-table");
-const addProductModal = new bootstrap.Modal(document.querySelector("#product-modal"));
-
-addForm.addEventListener("submit", function (evt) {
-    evt.preventDefault();
-    const elements = evt.target.elements;
-
-    const inputTitle = elements.title;
-    const inputPrice = elements.price;
-    const inputSelect = elements.manufacturer;
-    const inputBenefits = elements.benefits;
-
-    const titleValue = inputTitle.value;
-    const priceValue = inputPrice.value;
-    const selectValue = inputSelect.value;
-    const benefitsValue = inputBenefits.value.split(";");
-
-
-    if (titleValue.trim() && priceValue && selectValue) {
-        const product = {
-            id: Math.floor(Math.random() * 1000),
-            title: titleValue,
-            img: "https://picsum.photos/300/200",
-            price: priceValue,
-            model: selectValue,
-            addedDate: new Date().toISOString(),
-            benefits: benefitsValue,
-        }
-        addProductModal.hide();
-        addForm.reset();
-        products.push(product);
-        const elProduct = productRender(product);
-    }
-})
 
 const select = document.querySelector("#manufacturer");
 for (let m = 0; m < manufacturers.length; m++) {
@@ -136,33 +102,63 @@ for (let m = 0; m < manufacturers.length; m++) {
     select.append(optionSelect);
 
 }
+const addForm = document.querySelector("#edit-product-table");
+const addProductModal = new bootstrap.Modal(document.querySelector("#product-modal"));
 
+const addInput = document.querySelector("#add-benefits");
+const addList = document.querySelector("#edit-benefits-table");
+let addOption = [];
+addInput.addEventListener("input", function () {
 
-const input = document.querySelector("#edit-benefits");
-const optionsWrapper = document.querySelector("option-wrapper");
-let option = [];
-input.addEventListener("input", function () {
+    const addSplitedValue = addInput.value.trim().split(";");
 
-    const splitedValue = input.value.trim().split(";");
+    if (addSplitedValue.length === 2) {
+        addOption.push(addSplitedValue[0]);
+        addInput.value = "";
 
-    if (splitedValue.length === 2) {
-        option.push(splitedValue[0]);
-        input.value = "";
-
-        optionsWrapper.innerHTML = "";
-        for (let x = 0; x < option.length; x++) {
-            const optionSpan = createElement("span");
-            optionSpan.textContent = option[x];
-
-            optionsWrapper.append(optionSpan);
+        addList.innerHTML = "";
+        for (let a = 0; a < addOption.length; a++) {
+            const addOptionLi = createElement("li", "me-1 mb-1");
+            const addOptionBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", option[a]);
+            addOptionLi.append(addOptionBtn);
+            addList.append(addOptionLi);
         }
     }
-})
+});
+
+addForm.addEventListener("submit", function (evt) {
+    evt.preventDefault();
+    const elements = evt.target.elements;
+
+    const inputTitle = elements.title;
+    const inputPrice = elements.price;
+    const addInputSelect = elements.manufacturer;
+
+    const titleValue = inputTitle.value;
+    const priceValue = inputPrice.value;
+    const addSelectValue = addInputSelect.value;
+
+
+    if (titleValue.trim() && priceValue && addSelectValue) {
+        const addProduct = {
+            id: Math.floor(Math.random() * 1000),
+            title: titleValue,
+            img: "https://picsum.photos/300/200",
+            price: priceValue,
+            model: addSelectValue,
+            addedDate: new Date().toISOString(),
+            benefits: addOption,
+        }
+        addProductModal.hide();
+        addForm.reset();
+        products.push(addProduct);
+        const elProduct = productRender(addProduct);
+    }
+});
 const editTitle = document.querySelector("#edit-title");
 const editPrice = document.querySelector("#edit-price");
 const editManufacturer = document.querySelector("#edit-manufacturer");
 const editBenefits = document.querySelector("#benefits");
-
 
 const btn = document.querySelector("#product-btn");
 btn.addEventListener("click", function () {
@@ -184,7 +180,7 @@ productsTable.addEventListener("click", function (evt) {
         })
         editTitle.value = editProductItem.title;
         editPrice.value = editProductItem.price;
-        editManufacturer.vlaue = editProductItem.manufacturers;
+        editManufacturer.value = editProductItem.model;
         editBenefits.value = editProductItem.benefits;
 
         editForm.setAttribute("data-editing-id", editProductClicked);
@@ -194,6 +190,28 @@ productsTable.addEventListener("click", function (evt) {
 });
 const editForm = document.querySelector("#new-product-table");
 const editProductModal = new bootstrap.Modal(document.querySelector("#new-product-modal"));
+
+const input = document.querySelector("#edit-benefits");
+const optionsWrapper = document.querySelector("#edit-benefits-table");
+let option = [];
+input.addEventListener("input", function () {
+
+    const splitedValue = input.value.trim().split(";");
+
+    if (splitedValue.length === 2) {
+        option.push(splitedValue[0]);
+        input.value = "";
+
+        optionsWrapper.innerHTML = "";
+        for (let x = 0; x < option.length; x++) {
+            const optionLi = createElement("li", "me-1 mb-1");
+            const optionBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", option[x])
+            optionLi.append(optionBtn)
+            optionsWrapper.append(optionLi);
+        }
+    }
+});
+
 editForm.addEventListener("submit", function (evt) {
     evt.preventDefault();
 
@@ -202,7 +220,6 @@ editForm.addEventListener("submit", function (evt) {
     const titleValue = editTitle.value;
     const priceValue = editPrice.value;
     const selectValue = editManufacturer.value;
-    const editBenefitsValue = editBenefits.value.split(";");
 
     if (titleValue.trim() && priceValue && selectValue) {
         const product = {
@@ -212,7 +229,7 @@ editForm.addEventListener("submit", function (evt) {
             price: priceValue,
             model: selectValue,
             addedDate: new Date().toISOString(),
-            benefits: editBenefitsValue,
+            benefits: option,
         }
 
         const editingItemIndex = products.findIndex(function (product) {
@@ -222,8 +239,6 @@ editForm.addEventListener("submit", function (evt) {
         editForm.reset();
         renderProducts();
         editProductModal.hide();
-
-        
     }
 });
 const editSelect = document.querySelector("#edit-manufacturer");
