@@ -20,7 +20,7 @@ const showDate = function (dateString) {
 const productsTable = document.querySelector("#products");
 
 const productRender = function (product) {
-    const mark = 1500000;
+    const mark = product.price * 0.25;
     const productItem = createElement("li", "col-4");
     const productsContent = createElement("div", "card-body");
     const productsTitle = createElement("h2", "card-title", product.title);
@@ -46,16 +46,14 @@ const productRender = function (product) {
     const productPromotion = createElement("s");
     productPromotion.textContent = mark;
 
-    const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled mt-3");
+    const benefitsList = createElement("ul", "benefits-table d-flex flex-wrap list-unstyled mt-3");
     const benefitsItem = createElement("li", "me-1 mb-1");
     const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", product.benefits);
-
-
+    
+    
     benefitsItem.append(benefitsBtn);
     benefitsList.append(benefitsItem);
-
-
-
+   
 
     productsPromotionPrice.append(productPromotion);
     productsPrice.append(productsMark);
@@ -77,17 +75,23 @@ const productRender = function (product) {
     productsContent.append(productsDate);
     productsContent.append(productsParagraph);
     productsContent.append(benefitsList);
-
-
+   
 
     return productItem;
 }
 
 
+    // for (let t = 0; t < product.benefits.length; t++) {
+    // const currentBenefits = product.benefits.length[t];
+ 
+    
+    // }
+
+let showingProducts = products.slice();
 
 const renderProducts = function () {
     productsTable.innerHTML = "";
-    products.forEach(function (currentProducts) {
+    showingProducts.forEach(function (currentProducts) {
         const productItem = productRender(currentProducts);
         productsTable.append(productItem);
     });
@@ -152,13 +156,14 @@ addForm.addEventListener("submit", function (evt) {
         addProductModal.hide();
         addForm.reset();
         products.push(addProduct);
+        showingProducts.push(addProduct);
         const elProduct = productRender(addProduct);
     }
 });
 const editTitle = document.querySelector("#edit-title");
 const editPrice = document.querySelector("#edit-price");
 const editManufacturer = document.querySelector("#edit-manufacturer");
-const editBenefits = document.querySelector("#benefits");
+const editBenefits = document.querySelector("#edit-benefits");
 
 const btn = document.querySelector("#product-btn");
 btn.addEventListener("click", function () {
@@ -171,7 +176,13 @@ productsTable.addEventListener("click", function (evt) {
         const productItemIndex = products.findIndex(function (product) {
             return product.id === productId;
         })
+        const productShowItemIndex = products.findIndex(function (product) {
+            return product.id === productId;
+        })
+
         products.splice(productItemIndex, 1);
+        showingProducts.splice(productShowItemIndex, 1);
+
 
     } else if (evt.target.matches(".btn-secondary")) {
         const editProductClicked = +evt.target.dataset.id;
@@ -235,7 +246,11 @@ editForm.addEventListener("submit", function (evt) {
         const editingItemIndex = products.findIndex(function (product) {
             return product.id === editingId;
         })
+        const editingShowingItemIndex = showingProducts.findIndex(function (product) {
+            return product.id === editingId;
+        })
         products.splice(editingItemIndex, 1, product);
+        showingProducts.splice(editingShowingItemIndex, 1, product);
         editForm.reset();
         renderProducts();
         editProductModal.hide();
@@ -248,3 +263,43 @@ for (let l = 0; l < manufacturers.length; l++) {
 
     editSelect.append(editOptionSelect);
 }
+const filterFrom = document.querySelector(".filter");
+
+filterFrom.addEventListener("submit", function(evt) {
+    evt.preventDefault();
+
+    const elements = evt.target.elements;
+    const fromValue = elements.from.value;
+    const toValue = elements.to.value;
+    const searchValue = elements.search.value;
+    const sortValue = elements.sortby.value;
+
+    showingProducts = products
+    .sort(function(a, b) {
+        switch (sortValue) {
+            case "1":
+                if (a.name > b.name) {
+                    return 1
+                } else if (a.name < b.name) {
+                    return -1
+                };
+            case "2":
+                return b.price - a.price
+            case "3":
+            return a.price - b.price
+                break;
+            default:
+                break;
+        }
+    })
+    .filter(function(product) {
+    return product.price >= fromValue;
+    }).filter(function(product) {
+    return !toValue ? true : product.price <= toValue;
+    }).filter(function(product) {
+       const titleRegExp = new RegExp(searchValue, "gi");
+       return product.title.match(titleRegExp);
+    });
+
+    renderProducts();
+});

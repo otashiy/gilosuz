@@ -16,6 +16,15 @@ const products = [
     model: "Samsung",
     addedDate: new Date("2021-10-12").toISOString(),
     benefits: ["32gb", "1tb"]
+  },
+  {
+    id: 125,
+    title: "iPhone 13 Pro Max",
+    img: "https://imageio.forbes.com/specials-images/imageserve/6148e5c7b85bfa189955ed22/0x0.jpg?format=jpg&width=1200",
+    price: 15000000,
+    model: "iPhone",
+    addedDate: new Date("2021-10-12").toISOString(),
+    benefits: ["512gb", "1tb", "blue"]
   }
 ]
 
