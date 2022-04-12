@@ -10,7 +10,7 @@ const products = [
   },
   {
     id: 124,
-    title: "Samgung Note 20 Ultra",
+    title: "Samsung Note 20 Ultra",
     img: "https://cdn.mobilniki.net/i/4922/samsunggalaxynote20ultra5g_24188.jpg",
     price: 8300000,
     model: "Samsung",
