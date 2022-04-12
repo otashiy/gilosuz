@@ -49,8 +49,8 @@ const productRender = function (product) {
     
     for (let t = 0; t < product.benefits.length; t++) {
         const currentBenefits = product.benefits[t];
-        const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled mt-3");
-        const benefitsItem = createElement("li", "me-1 mb-1");
+        const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled");
+        const benefitsItem = createElement("li", "badge bg-primary me-1 mb-1");
         const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", currentBenefits);
 
         benefitsList.append(benefitsItem);
@@ -73,11 +73,11 @@ const productRender = function (product) {
 
     productsTable.append(productItem);
     productsContent.prepend(productBtnWrapper);
-    productsContent.prepend(productsTitle);
-    productsContent.prepend(productsPrice);
-    productsContent.prepend(productsPromotionPrice);
-    productsContent.prepend(productsDate);
     productsContent.prepend(productsParagraph);
+    productsContent.prepend(productsDate);
+    productsContent.prepend(productsPromotionPrice);
+    productsContent.prepend(productsPrice);
+    productsContent.prepend(productsTitle);
 
     return productItem;
 }
