@@ -18,68 +18,34 @@ const showDate = function (dateString) {
 }
 
 const productsTable = document.querySelector("#products");
-//const benefitsList = document.querySelector("#benefits-table");
+const productTemplate = document.querySelector("#template");
 
 const productRender = function (product) {
     const mark = product.price * 0.25;
-    const productItem = createElement("li", "col-4");
-    const productsContent = createElement("div", "card-body");
-    const productsTitle = createElement("h2", "card-title", product.title);
-    const productsPrice = createElement("p", "card-text fw-bold");
-    const productsMark = createElement("mark", "", product.price);
-    const productsImg = createElement("img", "card-img-top");
-    productsImg.src = product.img;
-    const productCard = createElement("div", "card");
-    const productsParagraph = createElement("p", "badge bg-success", product.model);
-    const productBtnWrapper = createElement("div", "position-absolute top-0 end-0 d-flex");
-    const productBtn = createElement("button", "btn rounded-0 btn-secondary");
+
+    const productsItem = productTemplate.content.cloneNode(true);
+    console.log(productsItem);
+
+    const productImg = productsItem.querySelector(".products__item-img");
+    productImg.src = product.img;
+    const productTitle = productsItem.querySelector(".products__item-title");
+    productsItem.querySelector(".products__item-title").textContent = product.title;
+    const productsMark = productsItem.querySelector(".products__item-mark");
+    productsItem.querySelector(".products__item-mark").textContent = product.price;
+    const productsPromotion = productsItem.querySelector(".undefined");
+    productsItem.querySelector(".undefined").textContent = mark;
+    const productsDate = productsItem.querySelector(".products__item-date");
+    productsItem.querySelector(".products__item-date").textContent = showDate(product.addedDate);
+    const productsItemTitle = productsItem.querySelector(".products__item-subtitle");
+    productsItem.querySelector(".products__item-subtitle").textContent = product.model;
+    const productBtn = productsItem.querySelector(".products__item-edit");
     productBtn.setAttribute("data-id", product.id);
-    productBtn.setAttribute("data-bs-toggle", "modal");
-    productBtn.setAttribute("data-bs-target", "#new-product-modal");
-    const productBtnDanger = createElement("button", "btn rounded-0 btn-danger");
-    productBtnDanger.setAttribute("data-id", product.id);
-    const productInner = createElement("i", "fa-solid fa-pen");
-    productInner.style.pointerEvents = "none";
-    const productInnerDanger = createElement("i", "fa-solid fa-trash");
-    productInnerDanger.style.pointerEvents = "none";
-    const productsPromotionPrice = createElement("p", "card-text");
-    const productsDate = createElement("p", "card-text", showDate(product.addedDate));
-    const productPromotion = createElement("s");
-    productPromotion.textContent = mark;
-    
-    for (let t = 0; t < product.benefits.length; t++) {
-        const currentBenefits = product.benefits[t];
-        const benefitsList = createElement("ul", "d-flex flex-wrap list-unstyled");
-        const benefitsItem = createElement("li", "badge bg-primary me-1 mb-1");
-        const benefitsBtn = createElement("button", "btn btn-sm badge rounded-pill btn-primary", currentBenefits);
-
-        benefitsList.append(benefitsItem);
-        benefitsItem.append(benefitsBtn);
-        productsContent.append(benefitsList);
-    };
-  
-
-    productsPromotionPrice.append(productPromotion);
-    productsPrice.append(productsMark);
-    productBtnDanger.append(productInnerDanger);
-    productBtn.append(productInner);
-    productBtnWrapper.append(productBtn);
-    productBtnWrapper.append(productBtnDanger);
+    const productBtnDanger = productsItem.querySelector(".products__item-delete");
 
 
-    productItem.append(productCard);
-    productCard.append(productsImg);
-    productCard.append(productsContent);
 
-    productsTable.append(productItem);
-    productsContent.prepend(productBtnWrapper);
-    productsContent.prepend(productsParagraph);
-    productsContent.prepend(productsDate);
-    productsContent.prepend(productsPromotionPrice);
-    productsContent.prepend(productsPrice);
-    productsContent.prepend(productsTitle);
-
-    return productItem;
+    productsTable.append(productsItem);
+    return productsItem;
 }
 
 
@@ -89,10 +55,16 @@ let showingProducts = products.slice();
 
 const renderProducts = function () {
     productsTable.innerHTML = "";
+
+   const productFragment = document.createDocumentFragment();
+
     elCount.textContent = `Count: ${showingProducts.length}`;
-    showingProducts.forEach(function (currentProducts) {
-        const elProduct = productRender(currentProducts);
+    showingProducts.forEach(function (product) {
+        const elProduct = productRender(product);
+       productFragment.append(elProduct);
+        
     });
+   productsTable.append(productFragment);
 }
 renderProducts();
 
@@ -155,6 +127,7 @@ addForm.addEventListener("submit", function (evt) {
         addProductModal.hide();
         addForm.reset();
         products.push(addProduct);
+        localStorage.setItem("products", JSON.stringify(products));
         showingProducts.push(addProduct);
         renderProducts();
     }
