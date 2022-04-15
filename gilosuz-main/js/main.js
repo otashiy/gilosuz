@@ -24,7 +24,7 @@ const productRender = function (product) {
     const mark = product.price * 0.25;
 
     const productsItem = productTemplate.content.cloneNode(true);
-    console.log(productsItem);
+    
 
     const productImg = productsItem.querySelector(".products__item-img");
     productImg.src = product.img;
@@ -41,6 +41,8 @@ const productRender = function (product) {
     const productBtn = productsItem.querySelector(".products__item-edit");
     productBtn.setAttribute("data-id", product.id);
     const productBtnDanger = productsItem.querySelector(".products__item-delete");
+    productBtnDanger = ("data-id", product.id);
+
 
 
 
