@@ -76,12 +76,12 @@ for (let m = 0; m < manufacturers.length; m++) {
     select.append(optionSelect);
 
 }
-const addForm = document.querySelector("#edit-product-table");
+
 const addProductModal = new bootstrap.Modal(document.querySelector("#product-modal"));
 
 
 const addInput = document.querySelector("#add-benefits");
-const addList = document.querySelector("#edit-benefits-table");
+const addList = document.querySelector("#benefits-table");
 let addOption = [];
 addInput.addEventListener("input", function () {
 
@@ -101,8 +101,10 @@ addInput.addEventListener("input", function () {
     }
 });
 
+const addForm = document.querySelector("#edit-product-table");
 addForm.addEventListener("submit", function (evt) {
     evt.preventDefault();
+
     const elements = evt.target.elements;
 
     const inputTitle = elements.title;
@@ -132,6 +134,8 @@ addForm.addEventListener("submit", function (evt) {
         renderProducts();
     }
 });
+
+
 const editTitle = document.querySelector("#edit-title");
 const editPrice = document.querySelector("#edit-price");
 const editManufacturer = document.querySelector("#edit-manufacturer");
@@ -153,6 +157,7 @@ productsTable.addEventListener("click", function (evt) {
         })
 
         products.splice(productItemIndex, 1);
+        localStorage.setItem("products", JSON.stringify(products));
         showingProducts.splice(productShowItemIndex, 1);
 
 
@@ -171,8 +176,7 @@ productsTable.addEventListener("click", function (evt) {
     }
     renderProducts();
 });
-const editForm = document.querySelector("#new-product-table");
-const editProductModal = new bootstrap.Modal(document.querySelector("#new-product-modal"));
+
 
 const input = document.querySelector("#edit-benefits");
 const optionsWrapper = document.querySelector("#edit-benefits-table");
@@ -194,6 +198,10 @@ input.addEventListener("input", function () {
         }
     }
 });
+
+const editForm = document.querySelector("#new-product-table");
+const editProductModal = new bootstrap.Modal(document.querySelector("#new-product-modal"));
+
 
 editForm.addEventListener("submit", function (evt) {
     evt.preventDefault();
@@ -222,12 +230,14 @@ editForm.addEventListener("submit", function (evt) {
             return product.id === editingId;
         })
         products.splice(editingItemIndex, 1, product);
+        localStorage.setItem("products", JSON.stringify(products));
         showingProducts.splice(editingShowingItemIndex, 1, product);
         editForm.reset();
-        renderProducts();
         editProductModal.hide();
+        renderProducts();
     }
 });
+
 const editSelect = document.querySelector("#edit-manufacturer");
 for (let l = 0; l < manufacturers.length; l++) {
     const editCurrentManufacturers = manufacturers[l];
@@ -241,6 +251,7 @@ filterFrom.addEventListener("submit", function(evt) {
     evt.preventDefault();
 
     const elements = evt.target.elements;
+    
     const fromValue = elements.from.value;
     const toValue = elements.to.value;
     const searchValue = elements.search.value;
